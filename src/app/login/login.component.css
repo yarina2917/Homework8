@@ -1,0 +1,13 @@
+.container form {
+  min-width: 150px;
+  max-width: 350px;
+  margin: 0 auto; }
+  .container form .form-group {
+    margin-bottom: 5px; }
+    .container form .form-group .full-width {
+      width: 100%; }
+  .container form button {
+    margin-right: 10px;
+    border: 1px solid black; }
+
+/*# sourceMappingURL=login.component.css.map */
