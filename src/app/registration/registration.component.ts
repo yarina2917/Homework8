@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { UserService } from "../services/user.service";
-import { Router } from "@angular/router";
+import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -37,7 +37,7 @@ export class RegistrationComponent implements OnInit {
         this.auth.logout();
       }
       this.router.navigate(['/login']);
-    })
+    });
   }
 }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from "../services/user.service";
-import { FormBuilder } from "@angular/forms";
+import { UserService } from '../services/user.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-todo',
@@ -16,6 +16,8 @@ export class TodoComponent implements OnInit {
   currentId;
   currentIndex;
   filterButton;
+  selectedFile: File;
+  url;
 
   todoForm = this.fb.group({
     title: [''],
@@ -27,7 +29,7 @@ export class TodoComponent implements OnInit {
   ngOnInit() {
     this.getList();
     this.editItemValue = false;
-    this.filterButton = 'need'
+    this.filterButton = 'need';
   }
 
   getList() {
@@ -46,38 +48,44 @@ export class TodoComponent implements OnInit {
 
   filter(status) {
     if (this.filterButton === 'need' && status === 'need') {
-      return true
+      return true;
     }
     if (this.filterButton === 'done' && status === 'done') {
-      return true
+      return true;
     }
     if (this.filterButton === 'all') {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   postItem() {
-    const body = {userId: this.auth.getToken(), title: this.todoForm.controls.title.value, description: this.todoForm.controls.description.value, status: 'need', selected: false};
+    const body = {
+      userId: this.auth.getToken(),
+      title: this.todoForm.controls.title.value,
+      description: this.todoForm.controls.description.value,
+      status: 'need',
+      selected: false
+    };
     this.auth.post(body).subscribe(() => {
       // use get, because we do not know id in body and can not delete item, which we have just created
       this.getList();
       this.todoForm.reset();
-    })
+    });
   }
 
   doneItem(id, index) {
     const body = {status: 'done'};
     this.auth.changeToDo(body, id).subscribe(() => {
       this.userList[index].status = 'done';
-    })
+    });
   }
 
   unDone(id, index) {
     const body = {status: 'need'};
     this.auth.changeToDo(body, id).subscribe(() => {
       this.userList[index].status = 'need';
-    })
+    });
   }
 
   editItem(item, index) {
@@ -94,7 +102,7 @@ export class TodoComponent implements OnInit {
     this.auth.changeToDo(body, this.currentId).subscribe(() => {
       this.userList[this.currentIndex].title = this.newTitle;
       this.userList[this.currentIndex].description = this.newDescription;
-    })
+    });
   }
 
   cancelChanges() {
@@ -104,24 +112,21 @@ export class TodoComponent implements OnInit {
   deleteItem(id, index) {
     this.auth.delete(id).subscribe(() => {
       this.userList.splice(index, 1);
-    })
+    });
   }
-
-  selectedFile: File;
-  url: string;
 
   onFileChanged(event, id, index) {
     this.selectedFile = event.target.files[0];
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.readAsDataURL(this.selectedFile);
-      reader.addEventListener("load", (event: any) => {
+      reader.addEventListener('load', (event: any) => {
         this.url = event.target.result;
         const body = {selected: this.url};
         this.auth.changeToDo(body, id).subscribe(() => {
           this.userList[index].selected = this.url;
-        })
-      })
+        });
+      });
     }
   }
 
@@ -129,11 +134,11 @@ export class TodoComponent implements OnInit {
     const body = {selected: false};
     this.auth.changeToDo(body, id).subscribe(() => {
       this.userList[index].selected = false;
-    })
+    });
   }
 
   public trackById(index, item) {
-    return item._id
+    return item._id;
   }
 
 }

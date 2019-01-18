@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -16,10 +16,10 @@ export class UserService {
   ) { }
 
   register(body) {
-    return this.http.post('https://lectorium.herokuapp.com/api/registration', body)
+    return this.http.post('https://lectorium.herokuapp.com/api/registration', body);
   }
 
-  login(body){
+  login(body) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export class UserService {
   }
 
   getToken() {
-    return this.cookieService.get('token')
+    return this.cookieService.get('token');
   }
 
   loggedIn() {
@@ -49,7 +49,7 @@ export class UserService {
       })
     };
     return this.http.get('https://lectorium.herokuapp.com/api/todolist', httpOptions);
-  };
+  }
 
   post(body) {
     const httpOptions = {
@@ -58,7 +58,7 @@ export class UserService {
         'x-apikey': this.getToken()
       })
     };
-    return this.http.post('https://lectorium.herokuapp.com/api/todolist', body, httpOptions)
+    return this.http.post('https://lectorium.herokuapp.com/api/todolist', body, httpOptions);
   }
 
   delete(id) {
@@ -67,7 +67,7 @@ export class UserService {
         'x-apikey': this.getToken()
       })
     };
-    return this.http.delete('https://lectorium.herokuapp.com/api/todolist/' + id, httpOptions)
+    return this.http.delete('https://lectorium.herokuapp.com/api/todolist/' + id, httpOptions);
   }
 
   changeToDo(body, id) {
@@ -77,6 +77,6 @@ export class UserService {
         'x-apikey': this.getToken()
       })
     };
-    return this.http.put('https://lectorium.herokuapp.com/api/todolist/' + id, body, httpOptions)
+    return this.http.put('https://lectorium.herokuapp.com/api/todolist/' + id, body, httpOptions);
   }
 }
