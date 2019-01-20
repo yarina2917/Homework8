@@ -9,10 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { HomeComponent } from './home/home.component';
-import { TodoComponent } from './todo/todo.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { HomeComponent } from './components/home/home.component';
+import { TodoComponent } from './components/todo/todo.component';
 
 @NgModule({
   declarations: [

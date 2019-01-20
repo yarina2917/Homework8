@@ -9,5 +9,12 @@
       display: inline-block;
       margin: 0 5px;
     }
+    :first-child {
+      border: 1px solid darkblue;
+    }
+  }
+  .warning {
+    margin-top: 10px;
+    color: darkred;
   }
 }

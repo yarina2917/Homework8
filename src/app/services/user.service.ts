@@ -9,74 +9,81 @@ import { CookieService } from 'ngx-cookie-service';
 
 export class UserService {
 
+  private apiUrl = 'https://lectorium.herokuapp.com';
+
   constructor(
     private http: HttpClient,
     private router: Router,
     private cookieService: CookieService
   ) { }
 
-  register(body) {
-    return this.http.post('https://lectorium.herokuapp.com/api/registration', body);
-  }
-
-  login(body) {
+  public register(body) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       })
     };
-    return this.http.post('https://lectorium.herokuapp.com/api/login', body, httpOptions);
+    return this.http.post(`${this.apiUrl}/api/registration`, body, httpOptions);
   }
 
-  getToken() {
+  public login(body) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+    return this.http.post(`${this.apiUrl}/api/login`, body, httpOptions);
+  }
+
+  public getToken(): string {
     return this.cookieService.get('token');
   }
 
-  loggedIn() {
+  public loggedIn(): boolean {
     return !!this.getToken();
   }
 
-  logout() {
+  public logout(): void {
     this.cookieService.delete('token');
     this.router.navigate(['']);
   }
 
-  get() {
+  public get() {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'x-apikey': this.getToken()
       })
     };
-    return this.http.get('https://lectorium.herokuapp.com/api/todolist', httpOptions);
+    return this.http.get(`${this.apiUrl}/api/todolist`, httpOptions);
   }
 
-  post(body) {
+  public post(body) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'x-apikey': this.getToken()
       })
     };
-    return this.http.post('https://lectorium.herokuapp.com/api/todolist', body, httpOptions);
+    return this.http.post(`${this.apiUrl}/api/todolist`, body, httpOptions);
   }
 
-  delete(id) {
+  public delete(id: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'x-apikey': this.getToken()
       })
     };
-    return this.http.delete('https://lectorium.herokuapp.com/api/todolist/' + id, httpOptions);
+    return this.http.delete(`${this.apiUrl}/api/todolist/${id}`, httpOptions);
   }
 
-  changeToDo(body, id) {
+  public changeToDo(body, id: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'x-apikey': this.getToken()
       })
     };
-    return this.http.put('https://lectorium.herokuapp.com/api/todolist/' + id, body, httpOptions);
+    return this.http.put(`${this.apiUrl}/api/todolist/${id}`, body, httpOptions);
   }
 }

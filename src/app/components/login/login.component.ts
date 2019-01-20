@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder,  Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -11,7 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm = this.fb.group(({
+  public loginForm: FormGroup = this.fb.group(({
     name: ['', [Validators.required]],
     password: ['', [Validators.required]]
   }));
@@ -30,11 +30,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  get f() { return this.loginForm.controls; }
+  public get formControls() {
+    return this.loginForm.controls;
+  }
 
-  loginUser () {
-    const body = this.loginForm.value;
-    this.api.login(body).subscribe(res => {
+  public loginUser(): void {
+    this.api.login(this.loginForm.value).subscribe(res => {
       this.cookieService.set( 'token', res['token'] );
       this.router.navigate(['/todo']);
     });

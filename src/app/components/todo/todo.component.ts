@@ -1,30 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { FormBuilder } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })
+
 export class TodoComponent implements OnInit {
 
-  userList;
-  editItemValue;
-  newTitle;
-  newDescription;
-  currentId;
-  currentIndex;
-  filterButton;
-  selectedFile: File;
-  url;
+  public userList;
+  public editItemValue: boolean;
+  public newTitle: string;
+  public newDescription: string;
+  public filterButton: string;
+  public selectedFile: File;
+  public imgUrl: string;
 
-  todoForm = this.fb.group({
+  private currentId: string;
+  private currentIndex: number;
+
+  public todoForm: FormGroup = this.fb.group({
     title: [''],
     description: ['']
   });
 
-  constructor(private auth: UserService, private fb: FormBuilder) { }
+  constructor(
+    private auth: UserService,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.getList();
@@ -32,21 +37,21 @@ export class TodoComponent implements OnInit {
     this.filterButton = 'need';
   }
 
-  getList() {
+  public getList(): void {
     this.auth.get().subscribe((res) => {
       this.userList = res;
     });
   }
 
-  logoutUser() {
+  public logoutUser(): void {
     this.auth.logout();
   }
 
-  filterList(value) {
+  public filterList(value: string): void {
     this.filterButton = value;
   }
 
-  filter(status) {
+  public filter(status: string): boolean {
     if (this.filterButton === 'need' && status === 'need') {
       return true;
     }
@@ -59,7 +64,7 @@ export class TodoComponent implements OnInit {
     return false;
   }
 
-  postItem() {
+  public postItem(): void {
     const body = {
       userId: this.auth.getToken(),
       title: this.todoForm.controls.title.value,
@@ -74,21 +79,19 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  doneItem(id, index) {
-    const body = {status: 'done'};
-    this.auth.changeToDo(body, id).subscribe(() => {
+  public doneItem(id: string, index: number): void {
+    this.auth.changeToDo({status: 'done'}, id).subscribe(() => {
       this.userList[index].status = 'done';
     });
   }
 
-  unDone(id, index) {
-    const body = {status: 'need'};
-    this.auth.changeToDo(body, id).subscribe(() => {
+  public unDone(id: string, index: number): void {
+    this.auth.changeToDo({status: 'need'}, id).subscribe(() => {
       this.userList[index].status = 'need';
     });
   }
 
-  editItem(item, index) {
+  public editItem(item, index: number): void {
     this.editItemValue = true;
     this.currentId = item._id;
     this.currentIndex = index;
@@ -96,7 +99,7 @@ export class TodoComponent implements OnInit {
     this.newDescription = item.description;
   }
 
-  saveChanges() {
+  public saveChanges(): void {
     this.editItemValue = false;
     const body = {title: this.newTitle, description: this.newDescription};
     this.auth.changeToDo(body, this.currentId).subscribe(() => {
@@ -105,39 +108,37 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  cancelChanges() {
+  public cancelChanges(): void {
     this.editItemValue = false;
   }
 
-  deleteItem(id, index) {
+  public deleteItem(id: string, index: number): void {
     this.auth.delete(id).subscribe(() => {
       this.userList.splice(index, 1);
     });
   }
 
-  onFileChanged(event, id, index) {
+  public onFileChanged(event, id: string, index: number): void {
     this.selectedFile = event.target.files[0];
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.readAsDataURL(this.selectedFile);
       reader.addEventListener('load', (event: any) => {
-        this.url = event.target.result;
-        const body = {selected: this.url};
-        this.auth.changeToDo(body, id).subscribe(() => {
-          this.userList[index].selected = this.url;
+        this.imgUrl = event.target.result;
+        this.auth.changeToDo({selected: this.imgUrl}, id).subscribe(() => {
+          this.userList[index].selected = this.imgUrl;
         });
       });
     }
   }
 
-  removeImage(id, index) {
-    const body = {selected: false};
-    this.auth.changeToDo(body, id).subscribe(() => {
+  public removeImage(id: string, index: number): void {
+    this.auth.changeToDo({selected: false}, id).subscribe(() => {
       this.userList[index].selected = false;
     });
   }
 
-  public trackById(index, item) {
+  public trackById(index: number, item): string {
     return item._id;
   }
 
