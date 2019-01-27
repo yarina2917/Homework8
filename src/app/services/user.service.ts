@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { TodoItem } from '../components/todo/todoitem';
+import { Observable } from 'rxjs/index';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class UserService {
     private cookieService: CookieService
   ) { }
 
-  public register(body) {
+  public register(body): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -26,7 +28,7 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/api/registration`, body, httpOptions);
   }
 
-  public login(body) {
+  public login(body): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -48,17 +50,17 @@ export class UserService {
     this.router.navigate(['']);
   }
 
-  public get() {
+  public get(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'x-apikey': this.getToken()
       })
     };
-    return this.http.get(`${this.apiUrl}/api/todolist`, httpOptions);
+    return this.http.get<TodoItem[]>(`${this.apiUrl}/api/todolist`, httpOptions);
   }
 
-  public post(body) {
+  public post(body): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/api/todolist`, body, httpOptions);
   }
 
-  public delete(id: string) {
+  public delete(id: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'x-apikey': this.getToken()
@@ -77,7 +79,7 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/api/todolist/${id}`, httpOptions);
   }
 
-  public changeToDo(body, id: string) {
+  public changeToDo(body, id: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

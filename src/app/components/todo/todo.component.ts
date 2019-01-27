@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { TodoItem } from './todoitem';
 
 @Component({
   selector: 'app-todo',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export class TodoComponent implements OnInit {
 
-  public userList;
+  public userList: TodoItem[];
   public editItemValue: boolean;
   public newTitle: string;
   public newDescription: string;
@@ -91,7 +92,7 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  public editItem(item, index: number): void {
+  public editItem(item: TodoItem, index: number): void {
     this.editItemValue = true;
     this.currentId = item._id;
     this.currentIndex = index;
@@ -118,7 +119,7 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  public onFileChanged(event, id: string, index: number): void {
+  public onFileChanged(event: any, id: string, index: number): void {
     this.selectedFile = event.target.files[0];
     if (this.selectedFile) {
       const reader = new FileReader();
@@ -138,7 +139,7 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  public trackById(index: number, item): string {
+  public trackById(index: number, item: TodoItem): string {
     return item._id;
   }
 

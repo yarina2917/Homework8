@@ -28,7 +28,7 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
   }
 
-  public get formControls() {
+  public get formControls(): any {
     return this.registerForm.controls;
   }
 
